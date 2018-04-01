@@ -55,6 +55,9 @@ void loop() {
 
   // update knob offset
   knobState = digitalRead(outputA); 
+  Serial.print("Knob State: ");
+  Serial.print(knobState);
+  Serial.print("\n")
   if (knobState != prevKnobState){     
     // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
     if (digitalRead(outputB) != knobState) { 
