@@ -1,6 +1,4 @@
 #include <CapacitiveSensor.h>
-#define outputA 7
-#define outputB 8
 
 const int n = 4;      //number of buttons
 int pushButton[n] = {3, 4, 5, 6}; //pin numbers of buttons
@@ -25,6 +23,8 @@ boolean csg[16] = {cs1g, cs2g, cs3g, cs4g};
 int prevKnobState;
 int knobState;
 int offset;
+int outputA = 7;
+int outputB = 8;
 
 void setup() {
   // knob setup
@@ -36,8 +36,7 @@ void setup() {
 
   
   // capacitive setup
-  for(int i=0; i<n; i++)
-  {
+  for(int i=0; i<n; i++) {
     cs[i].set_CS_AutocaL_Millis(0xFFFFFFFF);
   }
   Serial.begin(115200);
