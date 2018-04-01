@@ -76,7 +76,7 @@ void loop() {
       }
     }
     else if (csv[i] < sensitivity) {
-      noteOff(0x90, note + offseti, 0);
+      noteOff(0x90, note + offset, 0);
       csg[i] = true;
     }
 
