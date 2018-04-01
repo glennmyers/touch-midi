@@ -1,4 +1,6 @@
 #include <CapacitiveSensor.h>
+#define outputA 7
+#define outputB 8
 
 const int n = 4;      //number of buttons
 int pushButton[n] = {3, 4, 5, 6}; //pin numbers of buttons
@@ -8,11 +10,75 @@ int pot = A5;    // potentiometer pin
 int sensitivity = 80;
 byte note = 36;  //starting note
 
-
 CapacitiveSensor cs1 = CapacitiveSensor(2, 3); //declaring variables for touch sensing on specific pins
 CapacitiveSensor cs2 = CapacitiveSensor(2, 4);
+CapacitiveSensor cs3 = CapacitiveSensor(2, 5);
+CapacitiveSensor cs4 = CapacitiveSensor(2, 6);
+// declaring a variable for 
+CapacitiveSensor cs[4] = {cs1, cs2, cs3, cs4};
+boolean cs1g = true;
+boolean cs2g = true;
+boolean cs3g = true;
+boolean cs4g = true;
+boolean csg[16] = {cs1g, cs2g, cs3g, cs4g};
+
+int prevKnobState;
+int knobState;
+int offset;
+
+void setup() {
+  // knob setup
+  pinMode (outputA, INPUT);
+  pinMode (outputB, INPUT);
+  Serial.begin (9600);
+  prevKnobState = digitalRead(outputA);
+  offset = 0;
+
+  
+  // capacitive setup
+  aLastState = digitalRead(outputA);   
+  for(int i=0; i<n; i++)
+  {
+    cs[i].set_CS_AutocaL_Millis(0xFFFFFFFF);
+  }
+  Serial.begin(115200);
+  pinMode(A5,INPUT);
+}
+
+void loop() {
+  int data, sensitivity;
+  data = analogRead(A0);
+  sensitivity = map(data,0,1023,50,2000);
+  long cs1v = cs1.capacitiveSensor(30);
+  long cs2v = cs2.capacitiveSensor(30);
+  long cs3v = cs3.capacitiveSensor(30);
+  long cs4v = cs4.capacitiveSensor(30);
+  long csv[4] = {cs1v, cs2v, cs3v, cs4v};
+
+  // update knob offset
+  knobState = digitalRead(outputA); 
+  if (knobState != prevKnobState){     
+    // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
+    if (digitalRead(outputB) != knobState) { 
+      offset++;
+    } else {
+      offset--;
+    }
+    Serial.print("Position: ");
+    Serial.println(counter);
+  } 
+  prevKnobState = knobState;
+
+  // read capacitive state
+  for (int i = 0; i <= n; i++) {
+    if (csg[i]) {
+      if (csv[i] > sensitivity) {
+        noteOn(0x90, note + offset, 127);
+        csg[i] = false;
+      }
+    }
     else if (csv[i] < sensitivity) {
-      noteOff(0x90, note + i, 0);
+      noteOff(0x90, note + offseti, 0);
       csg[i] = true;
     }
 
