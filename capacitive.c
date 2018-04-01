@@ -36,7 +36,6 @@ void setup() {
 
   
   // capacitive setup
-  aLastState = digitalRead(outputA);   
   for(int i=0; i<n; i++)
   {
     cs[i].set_CS_AutocaL_Millis(0xFFFFFFFF);
@@ -64,8 +63,8 @@ void loop() {
     } else {
       offset--;
     }
-    Serial.print("Position: ");
-    Serial.println(counter);
+    Serial.print("Offset: ");
+    Serial.print(offset);
   } 
   prevKnobState = knobState;
 
